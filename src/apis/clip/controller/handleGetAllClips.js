@@ -16,6 +16,7 @@ export const handleGetAllClips = async (req, res) => {
       const errorResponse = createErrorResponse(error.name, error.message);
       res.status(error.statusCode).json(errorResponse);
     } else {
+      console.error(error);
       const errorResponse = createErrorResponse('SERVER_ERROR', '서버에서 알 수 없는 오류가 발생했습니다.');
       res.status(500).json(errorResponse);
     }
