@@ -1,3 +1,5 @@
+import { CustomError } from '../../../utils/errors.js';
+import { createErrorResponse } from '../../../utils/responseFormatter.js';
 import { getAllClips } from '../service/getAllClips.js';
 
 /**
@@ -7,10 +9,15 @@ import { getAllClips } from '../service/getAllClips.js';
  */
 export const handleGetAllClips = async (req, res) => {
   try {
-    const clipsData = await getAllClips();
-
-    res.status(200).json(clipsData);
+    const successResponse = await getAllClips();
+    res.status(200).json(successResponse);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    if (error instanceof CustomError) {
+      const errorResponse = createErrorResponse(error.name, error.message);
+      res.status(error.statusCode).json(errorResponse);
+    } else {
+      const errorResponse = createErrorResponse('SERVER_ERROR', '서버에서 알 수 없는 오류가 발생했습니다.');
+      res.status(500).json(errorResponse);
+    }
   }
 };

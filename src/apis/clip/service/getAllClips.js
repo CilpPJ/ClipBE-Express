@@ -1,7 +1,13 @@
+import { CustomError } from '../../../utils/errors.js';
+import { createSuccessResponse } from '../../../utils/responseFormatter.js';
 import { findAllClips } from '../repository/findAllClips.js';
 
 export const getAllClips = async () => {
   const rawClipsData = await findAllClips();
+
+  if (!rawClipsData || rawClipsData.length === 0) {
+    throw new CustomError('클립을 찾을 수 없습니다.', 404);
+  }
 
   const processedContent = rawClipsData.map((clip) => ({
     title: clip.title,
@@ -48,13 +54,5 @@ export const getAllClips = async () => {
     empty: processedContent.length === 0,
   };
 
-  const finalResponse = {
-    data: responseData,
-    status: 'SUCCESS',
-    serverDateTime: new Date().toISOString(),
-    errorCode: null,
-    errorMessage: null,
-  };
-
-  return finalResponse;
+  return createSuccessResponse(responseData);
 };
