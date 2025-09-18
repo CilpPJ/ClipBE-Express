@@ -1,11 +1,21 @@
 import { findAllClips } from '../repository/findAllClips.js';
 
 export const getAllClips = async () => {
-  const clipsContent = await findAllClips();
+  const rawClipsData = await findAllClips();
 
-  const response = {
+  const processedContent = rawClipsData.map((clip) => ({
+    title: clip.title,
+    tagId: clip.tag_id,
+    url: clip.url,
+    thumbnail: clip.thumbnail,
+    tagName: clip.tags.name,
+    memo: clip.memo,
+    createdAt: clip.created_at,
+  }));
+
+  const responseData = {
     size: 20,
-    content: clipsContent,
+    content: processedContent,
     number: 0,
     sort: [
       {
@@ -16,7 +26,7 @@ export const getAllClips = async () => {
         ignoreCase: false,
       },
     ],
-    numberOfElements: clipsContent.length,
+    numberOfElements: processedContent.length,
     pageable: {
       offset: 0,
       sort: [
@@ -35,8 +45,16 @@ export const getAllClips = async () => {
     },
     first: true,
     last: true,
-    empty: clipsContent.length === 0,
+    empty: processedContent.length === 0,
   };
 
-  return response;
+  const finalResponse = {
+    data: responseData,
+    status: 'SUCCESS',
+    serverDateTime: new Date().toISOString(),
+    errorCode: null,
+    errorMessage: null,
+  };
+
+  return finalResponse;
 };
