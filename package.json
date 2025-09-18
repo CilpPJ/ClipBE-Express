@@ -23,11 +23,11 @@
     ]
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "@supabase/supabase-js": "^2.57.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
-    "@supabase/supabase-js": "^2.57.4",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
