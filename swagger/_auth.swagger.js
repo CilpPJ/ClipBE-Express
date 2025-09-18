@@ -100,7 +100,7 @@
  * @swagger
  * /api/auth/refresh:
  *   post:
- *     summary: JWT 재발급 [미구현]
+ *     summary: JWT 재발급
  *     description: 사용자의 토큰을 재발급합니다.
  *     tags: [Auth - 회원 인증 API]
  *
@@ -151,7 +151,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "사용할 수 있는 휴대폰번호입니다."
+ *                   example: "사용할 수 있는 닉네임입니다."
  *       400:
  *         content:
  *           application/json:
@@ -160,7 +160,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "휴대폰번호 중복확인에 실패하였습니다."
+ *                   example: "닉네임 중복확인에 실패하였습니다."
  *       404:
  *         content:
  *           application/json:
@@ -169,7 +169,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "이미 사용중인 휴대폰번호입니다."
+ *                   example: "이미 사용중인 닉네임입니다."
  *
  */
 
@@ -177,7 +177,7 @@
  * @swagger
  * /api/auth/check/duplicateId/{userId}:
  *   post:
- *     summary: 아이디 중복확인 [미구현]
+ *     summary: 아이디 중복확인
  *     description: 회원가입시 아이디 중복확인을 진행합니다.
  *     tags: [Auth - 회원 인증 API]
  *     requestBody:
