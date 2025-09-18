@@ -3,7 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-const PORT = 8080;
+import { router } from './src/routes/router.js';
+
+const PORT = 8081;
 
 const createApp = async () => {
   dotenv.config();
@@ -29,6 +31,9 @@ const createApp = async () => {
   app.get('/', (req, res) => {
     res.send('CLIP 개발용 임시서버입니다.');
   });
+
+  // 라우터 연결
+  router(app);
 
   return app;
 };
