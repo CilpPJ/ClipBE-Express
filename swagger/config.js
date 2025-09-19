@@ -20,6 +20,29 @@ const options = {
       },
     ],
     components: {
+      schemas: {
+        BaseResponse: {
+          type: 'object',
+          properties: {
+            status: { type: 'string', example: 'SUCCESS' },
+            serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' },
+            errorCode: { type: 'string', nullable: true, example: null },
+            errorMessage: { type: 'string', nullable: true, example: null },
+          },
+        },
+        FailResponse: {
+          allOf: [
+            { $ref: '#/components/schemas/BaseResponse' },
+            {
+              type: 'object',
+              properties: {
+                status: { type: 'string', example: 'FAIL' },
+                data: { type: 'object', nullable: true, example: null },
+              },
+            },
+          ],
+        },
+      },
       securitySchemes: {
         bearerAuth: {
           type: 'http',
@@ -34,7 +57,7 @@ const options = {
       },
     ],
   },
-  apis: ['swagger/*.swagger.js', 'swagger/swagger/*'],
+  apis: ['./swagger/*.swagger.js'],
 };
 
 const specs = swaggerJsdoc(options);
