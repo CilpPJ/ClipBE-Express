@@ -24,10 +24,10 @@ const options = {
         BaseResponse: {
           type: 'object',
           properties: {
-            status: { type: 'string', example: 'SUCCESS' },
-            serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' },
-            errorCode: { type: 'string', nullable: true, example: null },
-            errorMessage: { type: 'string', nullable: true, example: null },
+            status: { type: 'string', example: 'string' },
+            serverDateTime: { type: 'string', example: 'string' },
+            errorCode: { type: 'string', nullable: true, example: 'string' },
+            errorMessage: { type: 'string', nullable: true, example: 'string' },
           },
         },
         FailResponse: {
