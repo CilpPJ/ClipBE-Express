@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /api/auth/signup:
+ * '/api/auth/signup':
  *   post:
  *     summary: 회원가입
  *     description: 회원정보를 입력하여 회원가입을 진행합니다.
