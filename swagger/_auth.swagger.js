@@ -20,24 +20,31 @@
  *                 type: string
  *     responses:
  *       200:
+ *         description: 회원가입 성공
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: "회원가입에 성공하였습니다."
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: "회원가입에 성공하였습니다."
+ *                 status: { type: 'string', example: 'string' }
+ *                 serverDateTime: { type: 'string', example: 'string' }
+ *                 errorCode: { type: 'string', nullable: true, example: 'string' }
+ *                 errorMessage: { type: 'string', nullable: true, example: 'string' }
+ *
  *       400:
+ *         description: 회원가입 실패
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "회원가입에 실패하였습니다."
+ *               $ref: '#/components/schemas/FailResponse'
  *       409:
+ *         description: 사용자 충돌
  *         content:
  *           application/json:
  *             schema:
@@ -73,27 +80,30 @@
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: "로그인에 성공하였습니다."
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     nickname:
+ *                       type: string
+ *                       example: "클리퍼"
+ *                     accessToken:
+ *                       type: string
+ *                     refreshToken:
+ *                       type: string
+ *                 status: { type: 'string', example: 'SUCCESS' }
+ *                 serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
+ *                 errorCode: { type: 'string', nullable: true, example: null }
+ *                 errorMessage: { type: 'string', nullable: true, example: null }
  *       400:
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "로그인에 실패하였습니다."
+ *               $ref: '#/components/schemas/FailResponse'
  *       404:
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "아이디 또는 비밀번호가 잘못되었습니다."
+ *               $ref: '#/components/schemas/FailResponse'
  */
 
 /**
@@ -111,18 +121,20 @@
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: "토큰 재발급에 성공하였습니다."
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                 status: { type: 'string', example: 'SUCCESS' }
+ *                 serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
+ *                 errorCode: { type: 'string', nullable: true, example: null }
+ *                 errorMessage: { type: 'string', nullable: true, example: null }
  *       400:
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "토큰 재발급에 실패하였습니다."
+ *               $ref: '#/components/schemas/FailResponse'
  *
  */
 
@@ -133,15 +145,12 @@
  *     summary: 닉네임 중복확인
  *     description: 닉네임 중복확인을 진행합니다.
  *     tags: [Auth - 회원 인증 API]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               nickname:
- *                 type: string
+ *     parameters:
+ *       - in: path
+ *         name: nickname
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         content:
@@ -149,27 +158,29 @@
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: "사용할 수 있는 닉네임입니다."
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     isDuplicated:
+ *                       type: boolean
+ *                       example: true
+ *                     message:
+ *                       type: string
+ *                       example: "사용할 수 있는 닉네임입니다."
+ *                 status: { type: 'string', example: 'SUCCESS' }
+ *                 serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
+ *                 errorCode: { type: 'string', nullable: true, example: null }
+ *                 errorMessage: { type: 'string', nullable: true, example: null }
  *       400:
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "닉네임 중복확인에 실패하였습니다."
- *       404:
+ *               $ref: '#/components/schemas/FailResponse'
+ *       409:
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "이미 사용중인 닉네임입니다."
+ *               $ref: '#/components/schemas/FailResponse'
  *
  */
 
@@ -180,42 +191,42 @@
  *     summary: 아이디 중복확인
  *     description: 회원가입시 아이디 중복확인을 진행합니다.
  *     tags: [Auth - 회원 인증 API]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               phoneNumber:
- *                 type: string
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
+ *         description: 아이디 중복확인 성공
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message:
- *                   type: string
- *                   example: "사용할 수 있는 아이디입니다."
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     isDuplicated:
+ *                       type: boolean
+ *                       example: true
+ *                     message:
+ *                       type: string
+ *                       example: "사용할 수 있는 아이디입니다."
+ *                     status: { type: 'string', example: 'SUCCESS' }
+ *                     serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
+ *                     errorCode: { type: 'string', nullable: true, example: null }
+ *                     errorMessage: { type: 'string', nullable: true, example: null }
  *       400:
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "아이디 중복확인에 실패하였습니다."
+ *               $ref: '#/components/schemas/FailResponse'
  *       404:
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "이미 사용중인 아이디입니다."
+ *               $ref: '#/components/schemas/FailResponse'
  *
  */
