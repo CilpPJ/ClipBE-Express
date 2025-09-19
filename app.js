@@ -2,6 +2,8 @@ import express from 'express';
 
 import cors from 'cors';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 
 import { router } from './src/routes/router.js';
 import { setupSwagger } from './swagger/config.js';
@@ -38,6 +40,17 @@ const createApp = async () => {
 
   // 라우터 연결
   router(app);
+
+  // Swagger 파일 디버깅용 임시 라우트
+  app.get('/debug-swagger-files', (req, res) => {
+    const swaggerDir = path.join(process.cwd(), 'swagger');
+    fs.readdir(swaggerDir, (err, files) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to read swagger directory', details: err });
+      }
+      res.json({ files });
+    });
+  });
 
   return app;
 };
