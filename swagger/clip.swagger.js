@@ -29,6 +29,54 @@
 /**
  * @swagger
  * /api/clips:
+ *   post:
+ *     summary: 클립 생성
+ *     description: 클립을 생성합니다.
+ *     tags: [Clip - 클립 API]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               url:
+ *                 type: string
+ *               memo:
+ *                 type: string
+ *               tagName:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: 클립 생성 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: "클립 생성을 성공하였습니다."
+ *                 status: { type: 'string', example: 'SUCCESS' }
+ *                 serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
+ *                 errorCode: { type: 'string', nullable: true, example: null }
+ *                 errorMessage: { type: 'string', nullable: true, example: null }
+ *       400:
+ *         description: 클립 생성 실패
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FailResponse'
+ */
+
+/**
+ * @swagger
+ * /api/clips:
  *   get:
  *     summary: 클립 전체 조회
  *     description: 모든 클립의 제목, 태그이름, 메모, 생성시간과 무한스크롤 관련정보를 가져옵니다.
@@ -133,6 +181,60 @@
  *                     message:
  *                       type: string
  *                       example: "클립이 성공적으로 삭제되었습니다."
+ *       404:
+ *         description: 클립을 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FailResponse'
+ */
+
+/**
+ * @swagger
+ * /api/clips/{clipId}:
+ *   put:
+ *     summary: 클립 내용 수정
+ *     description: 특정 클립의 내용을 수정합니다.
+ *     tags: [Clip - 클립 API]
+ *     parameters:
+ *       - in: path
+ *         name: clipId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               url:
+ *                 type: string
+ *               tagName:
+ *                 type: string
+ *               memo:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: 클립 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: "클립이 성공적으로 삭제되었습니다."
+ *                 status: { type: 'string', example: 'SUCCESS' }
+ *                 serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
+ *                 errorCode: { type: 'string', nullable: true, example: null }
+ *                 errorMessage: { type: 'string', nullable: true, example: null }
  *       404:
  *         description: 클립을 찾을 수 없음
  *         content:
