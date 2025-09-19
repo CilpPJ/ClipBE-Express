@@ -34,7 +34,7 @@ const options = {
       },
     ],
   },
-  apis: ['./*.swagger.js', './swagger/*'],
+  apis: ['/swagger/_auth.route.js'],
 };
 
 const specs = swaggerJsdoc(options);
