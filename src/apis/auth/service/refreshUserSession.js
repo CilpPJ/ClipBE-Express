@@ -10,7 +10,7 @@ export const refreshUserSession = async ({ refreshToken }) => {
     refresh_token: refreshToken,
   });
 
-  if (error) {
+  if (error || !data.session) {
     throw new CustomError('유효하지 않은 리프레시 토큰입니다.', 401);
   }
 
