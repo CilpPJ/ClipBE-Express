@@ -27,3 +27,17 @@
 ## #️⃣ 관련 이슈 (Related Issues)
 
 -
+
+## 🤖 Copilot 리뷰 가이드라인
+
+**리뷰어 및 Copilot에게 요청사항:**
+- [ ] 모든 리뷰는 **한국어**로 작성해주세요
+- [ ] Controller → Service → Repository 패턴 준수 여부 확인
+- [ ] CustomError 및 responseFormatter 사용 여부 체크
+- [ ] 파일 명명 규칙 (`handle{액션}.js`, `{동사}{명사}.js`) 확인
+- [ ] ES modules import에서 `.js` 확장자 포함 여부 확인
+
+**특별히 검토해주세요:**
+- [ ] 보안: Supabase 키나 민감한 정보 노출 여부
+- [ ] 에러 처리: 적절한 에러 메시지와 상태 코드 사용
+- [ ] 코드 일관성: 기존 프로젝트 패턴과의 일치성
