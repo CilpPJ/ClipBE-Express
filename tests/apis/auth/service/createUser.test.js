@@ -1,9 +1,7 @@
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 
-// 🔧 테스트 헬퍼 함수 import
-import { createSignUpResponse } from '../../../helpers/authTestHelpers.js';
-// 🎯 Mock 데이터 import
-import { MOCK_AUTH_DATA, MOCK_PROFILE_DATA, MOCK_SIGNUP_DATA } from '../../../mock/authMockData.js';
+// 🎯 새로운 구조화된 Mock 데이터 import
+import { AUTH_SUCCESS_SCENARIOS } from '../../../mock/scenarios/successCases.js';
 
 // 🎯 외부 의존성 모킹 설정 (import 전에!)
 jest.unstable_mockModule('../../../../src/db/supabase-client.js', () => ({
@@ -35,24 +33,22 @@ describe('createUser 서비스 테스트', () => {
 
   describe('✅ 성공 케이스', () => {
     test('새로운 사용자를 성공적으로 생성한다', async () => {
+      const scenario = AUTH_SUCCESS_SCENARIOS.basicSignUp;
+
       // 🎯 닉네임 중복 검사 - 중복 없음
-      findProfileByNickname.mockResolvedValue(null);
+      findProfileByNickname.mockResolvedValue(scenario.nicknameCheckResponse);
 
       // 🎯 Supabase 회원가입 성공 응답
-      supabase.auth.signUp.mockResolvedValue({
-        data: MOCK_AUTH_DATA.signUpSuccess,
-        error: null,
-      });
+      supabase.auth.signUp.mockResolvedValue(scenario.supabaseResponse);
 
       // 🎯 프로필 생성 성공 응답
-      createProfile.mockResolvedValue(MOCK_PROFILE_DATA.newUser);
+      createProfile.mockResolvedValue(scenario.profileCreateResponse);
 
       // 🚀 실제 함수 호출
-      const result = await createUser(MOCK_SIGNUP_DATA.validNewUser);
+      const result = await createUser(scenario.input);
 
       // 🔍 반환 데이터 검증
-      const expectedResponse = createSignUpResponse(MOCK_PROFILE_DATA.newUser, MOCK_SIGNUP_DATA.validNewUser.userId);
-      expect(result).toEqual(expectedResponse);
+      expect(result).toEqual(scenario.expectedOutput);
 
       // 🔍 호출 순서 및 파라미터 검증
       expect(findProfileByNickname).toHaveBeenCalledWith('테스트유저');
