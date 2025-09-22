@@ -134,6 +134,8 @@
  *                   properties:
  *                     accessToken:
  *                       type: string
+ *                     refreshToken:
+ *                       type: string
  *                 status: { type: 'string', example: 'SUCCESS' }
  *                 serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
  *                 errorCode: { type: 'string', nullable: true, example: null }
