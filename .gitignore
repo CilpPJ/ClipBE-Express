@@ -8,6 +8,7 @@ yarn-error.log*
 node_modules
 dist
 *.local
+coverage
 
 # Editor directories and files
 .vscode/*
