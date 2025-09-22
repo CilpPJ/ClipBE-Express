@@ -20,10 +20,11 @@ export const VALID_CLIP_INPUTS = {
 
   // 긴 제목과 메모가 있는 클립
   detailed: {
-    title: '매우 상세한 클립 제목 '.repeat(5),
+    title:
+      '매우 상세한 클립 제목 매우 상세한 클립 제목 매우 상세한 클립 제목 매우 상세한 클립 제목 매우 상세한 클립 제목 ',
     url: 'https://detailed-example.com/very/long/path/with/parameters?param=value',
     tagId: 2,
-    memo: '이것은 매우 긴 메모입니다. '.repeat(10),
+    memo: '이것은 매우 긴 메모입니다. 이것은 매우 긴 메모입니다. 이것은 매우 긴 메모입니다. 이것은 매우 긴 메모입니다. ',
     thumbnail: 'https://example.com/thumbnail.jpg',
   },
 

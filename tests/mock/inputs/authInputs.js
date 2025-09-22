@@ -1,3 +1,13 @@
+// 🧪 성능 최적화를 위한 상수 정의
+const LONG_USER_ID = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'; // 50자
+const LONG_PASSWORD_SUFFIX = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'; // 50자
+const LONG_NICKNAME_KO = '가가가가가가가가가가가가가가가가가가가가'; // 20자
+const VERY_LONG_NICKNAME = '매우긴닉네임매우긴닉네임매우긴닉네임매우긴닉네임매우긴닉네임'; // repeat(5)
+// 500자 토큰 (ESLint 줄 길이 제한 대응)
+const LONG_REFRESH_TOKEN_SUFFIX =
+  'a'.repeat(100) + 'a'.repeat(100) + 'a'.repeat(100) + 'a'.repeat(100) + 'a'.repeat(100); // 500자
+const TWENTY_A = 'AAAAAAAAAAAAAAAAAAAA'; // 20자
+
 // 🔐 인증 관련 사용자 입력 Mock 데이터
 // 클라이언트에서 서버로 전송되는 입력 형태들
 
@@ -36,7 +46,7 @@ export const VALID_AUTH_INPUTS = {
 
   // 긴 토큰 리프레시 입력
   longTokenRefresh: {
-    refreshToken: `very-long-refresh-token-${'a'.repeat(500)}`,
+    refreshToken: `very-long-refresh-token-${LONG_REFRESH_TOKEN_SUFFIX}`,
   },
 };
 
@@ -119,9 +129,9 @@ export const INVALID_AUTH_INPUTS = {
 export const EDGE_CASE_AUTH_INPUTS = {
   // 최대 길이 입력
   maxLength: {
-    userId: 'a'.repeat(50),
-    password: `P@ssw0rd!${'a'.repeat(50)}`,
-    nickname: '가'.repeat(20),
+    userId: LONG_USER_ID,
+    password: `P@ssw0rd!${LONG_PASSWORD_SUFFIX}`,
+    nickname: LONG_NICKNAME_KO,
   },
 
   // 최소 길이 입력
@@ -143,5 +153,51 @@ export const EDGE_CASE_AUTH_INPUTS = {
     userId: ' user with spaces ',
     password: ' password with spaces ',
     nickname: ' nickname with spaces ',
+  },
+
+  // 특수문자 포함 로그인 (edgeCases.js에서 사용)
+  specialCharLogin: {
+    userId: 'special!@#',
+    password: 'pass!@#$%^&*()',
+  },
+
+  // 긴 닉네임 회원가입 (edgeCases.js에서 사용)
+  longNicknameSignUp: {
+    userId: 'longuser',
+    password: 'password123!',
+    nickname: VERY_LONG_NICKNAME,
+  },
+
+  // 빈 닉네임 회원가입 (edgeCases.js에서 사용)
+  emptyNicknameSignUp: {
+    userId: 'emptyuser',
+    password: 'password123!',
+    nickname: '',
+  },
+
+  // 최대 길이 닉네임 (edgeCases.js에서 사용)
+  maxLengthNickname: {
+    userId: 'maxuser',
+    password: 'password123!',
+    nickname: TWENTY_A,
+  },
+
+  // 최소 길이 닉네임 (edgeCases.js에서 사용)
+  minLengthNickname: {
+    userId: 'minuser',
+    password: 'password123!',
+    nickname: 'A',
+  },
+
+  // 유니코드 닉네임 (edgeCases.js에서 사용)
+  unicodeNickname: {
+    userId: 'unicodeuser',
+    password: 'password123!',
+    nickname: '테스트😀한자漢字',
+  },
+
+  // 만료 직전 토큰 (edgeCases.js에서 사용)
+  tokenNearExpiry: {
+    refreshToken: 'near-expiry-token-12345',
   },
 };

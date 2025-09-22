@@ -197,10 +197,13 @@ describe('createUser 서비스 테스트', () => {
     });
 
     test('매우 긴 userId와 nickname도 처리한다', async () => {
+      const longUserId = 'a'.repeat(100); // 100자 userId
+      const longNickname = '가'.repeat(50); // 50자 한글 닉네임
+
       const mockUserData = {
-        userId: 'a'.repeat(100), // 100자 userId
+        userId: longUserId,
         password: 'password123',
-        nickname: '가'.repeat(50), // 50자 한글 닉네임
+        nickname: longNickname,
       };
 
       findProfileByNickname.mockResolvedValue(null);
@@ -210,17 +213,17 @@ describe('createUser 서비스 테스트', () => {
       });
       createProfile.mockResolvedValue({
         id: 'long-string-user-id',
-        nickname: '가'.repeat(50),
+        nickname: longNickname,
       });
 
       const result = await createUser(mockUserData);
 
-      expect(result.userId).toBe('a'.repeat(100));
-      expect(result.nickname).toBe('가'.repeat(50));
+      expect(result.userId).toBe(longUserId);
+      expect(result.nickname).toBe(longNickname);
 
       // 긴 userId가 올바르게 이메일로 변환되는지 확인
       expect(supabase.auth.signUp).toHaveBeenCalledWith({
-        email: `${'a'.repeat(100)}@clip.com`,
+        email: `${longUserId}@clip.com`,
         password: 'password123',
       });
     });

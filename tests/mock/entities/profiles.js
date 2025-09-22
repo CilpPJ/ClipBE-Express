@@ -32,7 +32,7 @@ export const PROFILE_ENTITIES = {
   // 긴 닉네임
   longNickname: {
     id: 'profile-id-long',
-    nickname: '매우긴닉네임'.repeat(5),
+    nickname: '매우긴닉네임매우긴닉네임매우긴닉네임매우긴닉네임매우긴닉네임',
     user_id: 'long-nickname-user-id',
     created_at: '2025-09-15T00:00:00.000Z',
     updated_at: '2025-09-15T00:00:00.000Z',

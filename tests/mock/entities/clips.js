@@ -82,7 +82,8 @@ export const CLIP_ENTITIES = {
     },
     {
       id: 'clip-id-long',
-      title: '매우 긴 제목이 포함된 클립입니다. '.repeat(10),
+      title:
+        '매우 긴 제목이 포함된 클립입니다. 매우 긴 제목이 포함된 클립입니다. 매우 긴 제목이 포함된 클립입니다. 매우 긴 제목이 포함된 클립입니다. ',
       tag_id: 999999, // 큰 숫자
       url: 'https://very-long-url.com/with/many/paths',
       thumbnail: 'data:image/base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ...',

@@ -64,12 +64,12 @@ export const AUTH_EDGE_CASE_SCENARIOS = {
     },
     profileCreateResponse: {
       ...PROFILE_ENTITIES.basic,
-      nickname: 'A'.repeat(20), // 최대 20자 가정
+      nickname: 'AAAAAAAAAAAAAAAAAAAA', // 최대 20자 가정
     },
     expectedOutput: {
       accessToken: AUTH_SUCCESS_RESPONSES.signIn.session.access_token,
       refreshToken: AUTH_SUCCESS_RESPONSES.signIn.session.refresh_token,
-      nickname: 'A'.repeat(20),
+      nickname: 'AAAAAAAAAAAAAAAAAAAA',
     },
   },
 

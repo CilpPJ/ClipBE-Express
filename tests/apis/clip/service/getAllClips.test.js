@@ -108,17 +108,17 @@ describe('getAllClips 서비스 테스트', () => {
       expect(result.data.content[1].memo).toContain('특수문자');
     });
 
-    test('tags 객체가 없는 경우 tagName이 undefined로 처리된다', async () => {
+    test('tags 객체가 없는 경우 tagName이 빈 문자열로 처리된다', async () => {
       findAllClips.mockResolvedValue(CLIP_ENTITIES.withoutTags);
 
       // � 실제 함수 호출
       const result = await getAllClips();
 
-      // 🔍 에러가 발생하지 않고 tagName이 undefined로 처리되는지 확인
+      // 🔍 에러가 발생하지 않고 tagName이 빈 문자열로 처리되는지 확인
       expect(result.data.content).toHaveLength(1);
       expect(result.data.content[0].title).toBe('태그 없는 클립');
       expect(result.data.content[0].tagId).toBe(5);
-      expect(result.data.content[0].tagName).toBeUndefined();
+      expect(result.data.content[0].tagName).toBe('');
       expect(result.data.content[0].url).toBe('https://no-tags.com');
       expect(result.data.content[0].memo).toBe('태그 정보가 없는 클립');
     });

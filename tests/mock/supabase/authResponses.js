@@ -63,7 +63,7 @@ export const AUTH_ERROR_RESPONSES = {
   emailAlreadyExists: {
     message: 'User already registered',
     status: 422,
-    code: 'email_address_not_authorized',
+    code: 'email_exists',
   },
 
   // 잘못된 리프레시 토큰

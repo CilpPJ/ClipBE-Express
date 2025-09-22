@@ -9,7 +9,7 @@ export const getAllClips = async () => {
     tagId: clip.tag_id,
     url: clip.url,
     thumbnail: clip.thumbnail,
-    tagName: clip.tags?.name,
+    tagName: clip.tags?.name ?? '',
     memo: clip.memo,
     createdAt: clip.created_at,
   }));
