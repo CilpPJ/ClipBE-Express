@@ -113,7 +113,15 @@
  *     summary: JWT 재발급
  *     description: 사용자의 토큰을 재발급합니다.
  *     tags: [Auth - 회원 인증 API]
- *
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
  *     responses:
  *       200:
  *         content:
@@ -125,6 +133,8 @@
  *                   type: object
  *                   properties:
  *                     accessToken:
+ *                       type: string
+ *                     refreshToken:
  *                       type: string
  *                 status: { type: 'string', example: 'SUCCESS' }
  *                 serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
