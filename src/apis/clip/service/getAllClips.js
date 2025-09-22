@@ -2,7 +2,7 @@ import { createSuccessResponse } from '../../../utils/responseFormatter.js';
 import { findAllClips } from '../repository/findAllClips.js';
 
 export const getAllClips = async () => {
-  const rawClipsData = await findAllClips();
+  const rawClipsData = (await findAllClips()) || [];
 
   const processedContent = rawClipsData.map((clip) => ({
     title: clip.title,

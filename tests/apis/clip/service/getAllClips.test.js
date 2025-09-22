@@ -168,11 +168,19 @@ describe('getAllClips 서비스 테스트', () => {
       expect(findAllClips).toHaveBeenCalledTimes(1);
     });
 
-    test('Repository에서 null을 반환하면 에러가 발생한다', async () => {
+    test('Repository에서 null을 반환하면 빈 배열로 안전하게 처리된다', async () => {
       findAllClips.mockResolvedValue(null);
 
-      // null에 대해 map을 호출하면 TypeError가 발생해야 함
-      await expect(getAllClips()).rejects.toThrow(TypeError);
+      // 🚀 실제 함수 호출
+      const result = await getAllClips();
+
+      // 🔍 null이 빈 배열로 처리되어 정상적인 응답이 반환되는지 확인
+      expect(result.data.content).toEqual([]);
+      expect(result.data.numberOfElements).toBe(0);
+      expect(result.data.empty).toBe(true);
+      expect(result.status).toBe('SUCCESS');
+
+      expect(findAllClips).toHaveBeenCalledTimes(1);
     });
   });
 });
