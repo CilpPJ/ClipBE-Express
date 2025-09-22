@@ -2,14 +2,14 @@ import { createSuccessResponse } from '../../../utils/responseFormatter.js';
 import { findAllClips } from '../repository/findAllClips.js';
 
 export const getAllClips = async () => {
-  const rawClipsData = await findAllClips();
+  const rawClipsData = (await findAllClips()) || [];
 
   const processedContent = rawClipsData.map((clip) => ({
     title: clip.title,
     tagId: clip.tag_id,
     url: clip.url,
     thumbnail: clip.thumbnail,
-    tagName: clip.tags.name,
+    tagName: clip.tags?.name ?? '',
     memo: clip.memo,
     createdAt: clip.created_at,
   }));
