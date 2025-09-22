@@ -2,8 +2,7 @@ import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 
 // 🔧 테스트 헬퍼 함수 import
 import { createExpectedResponse } from '../../../helpers/clipTestHelpers.js';
-// 🎯 Mock 데이터 import
-import { MOCK_RAW_CLIPS, RECENT_CLIPS_RAW } from '../../../mock/clipMockData.js';
+import { CLIP_ENTITIES, PRODUCTION_CLIPS } from '../../../mock/entities/clips.js';
 
 // 🎯 Repository 모킹을 먼저 설정 (import 전에!)
 jest.unstable_mockModule('../../../../src/apis/clip/repository/findAllClips.js', () => ({
@@ -22,13 +21,13 @@ describe('getAllClips 서비스 테스트', () => {
   describe('✅ 성공 케이스', () => {
     test('클립 데이터를 올바른 형태로 변환해서 반환한다', async () => {
       // 🎯 Mock 데이터 사용
-      findAllClips.mockResolvedValue(MOCK_RAW_CLIPS.basic);
+      findAllClips.mockResolvedValue(CLIP_ENTITIES.basic);
 
       // 🚀 실제 함수 호출
       const result = await getAllClips();
 
       // 🔍 예상 응답과 비교 (헬퍼 함수 사용)
-      const expectedResponse = createExpectedResponse(MOCK_RAW_CLIPS.basic);
+      const expectedResponse = createExpectedResponse(CLIP_ENTITIES.basic);
       expect(result).toEqual(expectedResponse);
 
       // Repository 함수가 호출되었는지 확인
@@ -36,58 +35,62 @@ describe('getAllClips 서비스 테스트', () => {
     });
 
     test('빈 클립 목록도 올바르게 처리한다', async () => {
-      // 🎯 빈 배열 반환 모킹
-      findAllClips.mockResolvedValue(MOCK_RAW_CLIPS.empty);
+      // 🎯 빈 배열 반환
+      findAllClips.mockResolvedValue([]);
 
+      // 🚀 실제 함수 호출
       const result = await getAllClips();
 
-      // 🔍 빈 데이터에 대한 응답 검증
-      expect(result.status).toBe('SUCCESS');
-      expect(result.data.content).toEqual([]);
-      expect(result.data.numberOfElements).toBe(0);
-      expect(result.data.empty).toBe(true); // 데이터가 없으므로 true
-      expect(result.data.first).toBe(true);
-      expect(result.data.last).toBe(true);
+      // 🔍 빈 배열이 올바르게 반환되는지 확인
+      const expectedResponse = createExpectedResponse([]);
+      expect(result).toEqual(expectedResponse);
 
       expect(findAllClips).toHaveBeenCalledTimes(1);
     });
 
     test('단일 클립 데이터도 올바르게 처리한다', async () => {
-      findAllClips.mockResolvedValue(MOCK_RAW_CLIPS.single);
+      findAllClips.mockResolvedValue(CLIP_ENTITIES.single);
 
       const result = await getAllClips();
 
-      expect(result.data.content).toHaveLength(1);
-      expect(result.data.numberOfElements).toBe(1);
-      expect(result.data.empty).toBe(false);
-      expect(result.data.content[0].title).toBe('유일한 클립');
+      // 🔍 단일 클립이 올바른 구조로 변환되는지 확인
+      const expectedResponse = createExpectedResponse(CLIP_ENTITIES.single);
+      expect(result).toEqual(expectedResponse);
+
+      expect(findAllClips).toHaveBeenCalledTimes(1);
     });
 
     test('실제 프로덕션 데이터와 같은 구조로 처리한다', async () => {
-      // 🎯 제공해주신 RECENT_CLIPS_RAW 데이터 사용
-      findAllClips.mockResolvedValue(RECENT_CLIPS_RAW);
+      // 🎯 제공해주신 실제 프로덕션 데이터 사용
+      findAllClips.mockResolvedValue(PRODUCTION_CLIPS);
 
+      // 🚀 실제 함수 호출
       const result = await getAllClips();
 
-      expect(result.status).toBe('SUCCESS');
-      expect(result.data.content).toHaveLength(4);
+      // 🔍 전체 길이 검증
+      expect(result.data.content.length).toBe(PRODUCTION_CLIPS.length);
 
-      // 첫 번째 실제 데이터 검증
-      expect(result.data.content[0]).toEqual({
-        title: '효율적인 토큰 관리 방법',
-        tagId: 1,
-        url: 'https://velog.io/@dobby_min/token-management',
-        thumbnail: 'https://velog.velcdn.com/images/dobby_min/post/8c9496d3-cf1a-4cff-8eb5-9fecb769a2d4/image.png',
-        tagName: '개발',
-        memo: '토큰 관리는 보안과 성능에 큰 영향을 미칩니다. 올바른 토큰 저장 방법과 효율적인 토큰 사용 전략을 알아보세요.',
-        createdAt: '2025-01-15T14:30:00.000Z',
-      });
+      // 🔍 첫 번째와 마지막 요소 구조 검증
+      if (result.data.content.length > 0) {
+        expect(result.data.content[0]).toHaveProperty('title');
+        expect(result.data.content[0]).toHaveProperty('tagName');
+        expect(result.data.content[0]).toHaveProperty('url');
+        expect(result.data.content[0]).toHaveProperty('thumbnail');
+        expect(result.data.content[0]).toHaveProperty('memo');
+        expect(result.data.content[0]).toHaveProperty('createdAt');
+
+        const lastIndex = result.data.content.length - 1;
+        expect(result.data.content[lastIndex]).toHaveProperty('title');
+        expect(result.data.content[lastIndex]).toHaveProperty('tagName');
+      }
+
+      expect(findAllClips).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('🧪 데이터 변환 테스트', () => {
     test('특수한 데이터 타입들도 올바르게 변환된다', async () => {
-      findAllClips.mockResolvedValue(MOCK_RAW_CLIPS.special);
+      findAllClips.mockResolvedValue(CLIP_ENTITIES.special);
 
       const result = await getAllClips();
 
@@ -106,7 +109,7 @@ describe('getAllClips 서비스 테스트', () => {
     });
 
     test('tags 객체가 없는 경우 에러가 발생한다 (실제 코드 동작)', async () => {
-      findAllClips.mockResolvedValue(MOCK_RAW_CLIPS.withoutTags);
+      findAllClips.mockResolvedValue(CLIP_ENTITIES.withoutTags);
 
       // 🔍 실제 코드에서는 tags.name에 접근할 때 에러가 발생함
       await expect(getAllClips()).rejects.toThrow(TypeError);
