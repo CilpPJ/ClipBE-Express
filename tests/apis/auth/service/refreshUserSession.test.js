@@ -1,9 +1,7 @@
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 
-// 🔧 테스트 헬퍼 함수 import
-import { createRefreshResponse } from '../../../helpers/authTestHelpers.js';
-// 🎯 Mock 데이터 import
-import { MOCK_AUTH_DATA, MOCK_REFRESH_DATA } from '../../../mock/authMockData.js';
+// 🎯 새로운 구조화된 Mock 데이터 import
+import { AUTH_SUCCESS_SCENARIOS } from '../../../mock/scenarios/successCases.js';
 
 // 🎯 Supabase 클라이언트 모킹 (import 전에!)
 jest.unstable_mockModule('../../../../src/db/supabase-client.js', () => ({
@@ -25,24 +23,20 @@ describe('refreshUserSession 서비스 테스트', () => {
 
   describe('✅ 성공 케이스', () => {
     test('유효한 리프레시 토큰으로 새로운 세션을 발급받는다', async () => {
+      const scenario = AUTH_SUCCESS_SCENARIOS.tokenRefresh;
+
       // 🎯 Supabase 세션 리프레시 성공 응답
-      supabase.auth.refreshSession.mockResolvedValue({
-        data: MOCK_AUTH_DATA.refreshSuccess,
-        error: null,
-      });
+      supabase.auth.refreshSession.mockResolvedValue(scenario.supabaseResponse);
 
       // 🚀 실제 함수 호출
-      const result = await refreshUserSession({
-        refreshToken: MOCK_REFRESH_DATA.validRefreshToken,
-      });
+      const result = await refreshUserSession(scenario.input);
 
       // 🔍 반환 데이터 검증
-      const expectedResponse = createRefreshResponse(MOCK_AUTH_DATA.refreshSuccess);
-      expect(result).toEqual(expectedResponse);
+      expect(result).toEqual(scenario.expectedOutput);
 
       // 🔍 Supabase 호출 파라미터 검증
       expect(supabase.auth.refreshSession).toHaveBeenCalledWith({
-        refresh_token: MOCK_REFRESH_DATA.validRefreshToken,
+        refresh_token: scenario.input.refreshToken,
       });
 
       expect(supabase.auth.refreshSession).toHaveBeenCalledTimes(1);
