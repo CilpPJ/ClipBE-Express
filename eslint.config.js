@@ -21,6 +21,32 @@ export default tseslint.config(
   },
 
   {
+    files: ['**/*.test.js', '**/*.spec.js', '__tests__/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'module',
+      globals: {
+        jest: 'readonly',
+        expect: 'readonly',
+        describe: 'readonly',
+        test: 'readonly',
+        it: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+      },
+    },
+    plugins: {
+      prettier: prettier,
+    },
+    rules: {
+      'no-console': 'off',
+      'no-undef': 'off',
+    },
+  },
+
+  {
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
