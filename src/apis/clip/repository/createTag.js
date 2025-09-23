@@ -17,7 +17,7 @@ export const createTag = async (tagName, userId, userToken) => {
   if (userToken) {
     const supabaseUrl = process.env.SUPABASE_URL;
     // Service Key 대신 public anon key를 사용해야 하지만, 현재 없으므로 다른 방법 시도
-    client = createClient(supabaseUrl, process.env.SUPABASE_SERVICE_KEY, {
+    client = createClient(supabaseUrl, process.env.SUPABASE_ANON_KEY, {
       global: {
         headers: {
           Authorization: `Bearer ${userToken}`,
