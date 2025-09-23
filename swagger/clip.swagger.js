@@ -75,36 +75,17 @@
  *                     id:
  *                       type: integer
  *                       example: 123
- *                     title:
- *                       type: string
- *                       example: "React 상태 관리 가이드"
- *                     url:
- *                       type: string
- *                       example: "https://react.dev/learn/managing-state"
- *                     tag_id:
+ *                       description: 생성된 클립의 고유 ID
+ *                     tagId:
  *                       type: integer
- *                       example: 1
- *                     user_id:
+ *                       example: 30
+ *                       description: 연결된 태그의 고유 ID
+ *                     message:
  *                       type: string
- *                       example: "user-uuid-123"
- *                     memo:
- *                       type: string
- *                       nullable: true
- *                       example: "유용한 React 상태 관리 팁들"
- *                     thumbnail:
- *                       type: string
- *                       nullable: true
- *                       example: "https://example.com/thumbnail.jpg"
- *                     created_at:
- *                       type: string
- *                       format: date-time
- *                       example: "2025-01-01T12:00:00.000Z"
- *                     updated_at:
- *                       type: string
- *                       format: date-time
- *                       example: "2025-01-01T12:00:00.000Z"
+ *                       example: "클립이 성공적으로 생성되었습니다."
+ *                       description: 성공 메시지
  *                 status: { type: 'string', example: 'SUCCESS' }
- *                 serverDateTime: { type: 'string', example: '2025-01-01T12:00:00.000Z' }
+ *                 serverDateTime: { type: 'string', example: '2025-09-23T10:15:51.891Z' }
  *                 errorCode: { type: 'string', nullable: true, example: null }
  *                 errorMessage: { type: 'string', nullable: true, example: null }
  *       400:

@@ -83,6 +83,7 @@ export const createNewClip = async (clipData) => {
     return {
       id: newClip.id,
       tagId: newClip.tag_id,
+      message: '클립이 성공적으로 생성되었습니다.',
     };
   } catch (dbError) {
     if (dbError.message.includes('foreign key constraint')) {
