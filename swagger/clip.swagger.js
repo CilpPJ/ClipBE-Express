@@ -31,7 +31,7 @@
  * /api/clips:
  *   post:
  *     summary: 클립 생성
- *     description: 클립을 생성합니다.
+ *     description: 새로운 클립을 생성합니다.
  *     tags: [Clip - 클립 API]
  *     requestBody:
  *       required: true
@@ -39,17 +39,30 @@
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - title
+ *               - url
+ *               - tagName
  *             properties:
  *               title:
  *                 type: string
+ *                 example: "React 상태 관리 가이드"
  *               url:
  *                 type: string
- *               memo:
- *                 type: string
+ *                 example: "https://react.dev/learn/managing-state"
  *               tagName:
  *                 type: string
+ *                 example: "개발"
+ *               memo:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "유용한 React 상태 관리 팁들"
+ *               thumbnail:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "https://example.com/thumbnail.jpg"
  *     responses:
- *       200:
+ *       201:
  *         description: 클립 생성 성공
  *         content:
  *           application/json:
@@ -59,15 +72,55 @@
  *                 data:
  *                   type: object
  *                   properties:
- *                     message:
+ *                     id:
+ *                       type: integer
+ *                       example: 123
+ *                     title:
  *                       type: string
- *                       example: "클립 생성을 성공하였습니다."
+ *                       example: "React 상태 관리 가이드"
+ *                     url:
+ *                       type: string
+ *                       example: "https://react.dev/learn/managing-state"
+ *                     tag_id:
+ *                       type: integer
+ *                       example: 1
+ *                     user_id:
+ *                       type: string
+ *                       example: "user-uuid-123"
+ *                     memo:
+ *                       type: string
+ *                       nullable: true
+ *                       example: "유용한 React 상태 관리 팁들"
+ *                     thumbnail:
+ *                       type: string
+ *                       nullable: true
+ *                       example: "https://example.com/thumbnail.jpg"
+ *                     created_at:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-01-01T12:00:00.000Z"
+ *                     updated_at:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-01-01T12:00:00.000Z"
  *                 status: { type: 'string', example: 'SUCCESS' }
- *                 serverDateTime: { type: 'string', example: '2025-09-19T14:30:00.000Z' }
+ *                 serverDateTime: { type: 'string', example: '2025-01-01T12:00:00.000Z' }
  *                 errorCode: { type: 'string', nullable: true, example: null }
  *                 errorMessage: { type: 'string', nullable: true, example: null }
  *       400:
- *         description: 클립 생성 실패
+ *         description: 클립 생성 실패 (유효성 검사 오류)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FailResponse'
+ *       401:
+ *         description: 인증 실패
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FailResponse'
+ *       500:
+ *         description: 서버 내부 오류
  *         content:
  *           application/json:
  *             schema:
