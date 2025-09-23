@@ -1,11 +1,23 @@
 import { handleTokenRefresh } from '../apis/auth/controller/handleTokenRefresh.js';
 import { handleUserCreate } from '../apis/auth/controller/handleUserCreate.js';
 import { handleUserLogin } from '../apis/auth/controller/handlerUserLogin.js';
+import { handleCreateClip } from '../apis/clip/controller/handleCreateClip.js';
 import { handleGetAllClips } from '../apis/clip/controller/handleGetAllClips.js';
+import { conditionalAuth } from '../middlewares/auth.js';
 
 export const router = (app) => {
-  app.get('/api/clips', handleGetAllClips);
+  // 인증 제외 경로 설정 (auth API만 제외)
+  const authExcludePaths = ['/api/auth'];
+
+  // 전역 인증 미들웨어 적용 (auth API 제외)
+  app.use(conditionalAuth(authExcludePaths));
+
+  // Auth API (인증 불필요)
   app.post('/api/auth/login', handleUserLogin);
   app.post('/api/auth/signup', handleUserCreate);
   app.post('/api/auth/refresh', handleTokenRefresh);
+
+  // Clip API (인증 필요)
+  app.get('/api/clips', handleGetAllClips);
+  app.post('/api/clips', handleCreateClip);
 };
