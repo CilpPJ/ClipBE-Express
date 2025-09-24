@@ -1,8 +1,6 @@
 import { jest } from '@jest/globals';
 
-import { checkNicknameExists } from '../../../../src/apis/auth/repository/checkNicknameExists.js';
-
-// Mocking
+// Mock supabase before importing the module
 const mockSupabase = {
   from: jest.fn().mockReturnThis(),
   select: jest.fn().mockReturnThis(),
@@ -10,9 +8,16 @@ const mockSupabase = {
   single: jest.fn(),
 };
 
-jest.unstable_mockModule('../../../../src/db/supabase-client.js', () => ({
-  supabase: mockSupabase,
-}));
+// Use dynamic import and module mocking
+jest.mock(
+  '../../../../src/db/supabase-client.js',
+  () => ({
+    supabase: mockSupabase,
+  }),
+  { virtual: true }
+);
+
+const { checkNicknameExists } = await import('../../../../src/apis/auth/repository/checkNicknameExists.js');
 
 describe('checkNicknameExists 리포지토리 테스트', () => {
   beforeEach(() => {

@@ -1,13 +1,17 @@
 import { jest } from '@jest/globals';
 
-import { checkNicknameDuplication } from '../../../../src/apis/auth/service/checkNicknameDuplication.js';
+// Mock the repository before importing
+const mockCheckNicknameExists = jest.fn();
 
-// Mocking
-jest.unstable_mockModule('../../../../src/apis/auth/repository/checkNicknameExists.js', () => ({
-  checkNicknameExists: jest.fn(),
-}));
+jest.mock(
+  '../../../../src/apis/auth/repository/mockCheckNicknameExists.js',
+  () => ({
+    checkNicknameExists: mockCheckNicknameExists,
+  }),
+  { virtual: true }
+);
 
-const { checkNicknameExists } = await import('../../../../src/apis/auth/repository/checkNicknameExists.js');
+const { checkNicknameDuplication } = await import('../../../../src/apis/auth/service/checkNicknameDuplication.js');
 
 describe('checkNicknameDuplication 서비스 테스트', () => {
   beforeEach(() => {
@@ -18,7 +22,7 @@ describe('checkNicknameDuplication 서비스 테스트', () => {
     test('사용 가능한 닉네임인 경우 적절한 응답을 반환한다', async () => {
       // Given
       const nickname = '새닉네임';
-      checkNicknameExists.mockResolvedValue(false);
+      mockCheckNicknameExists.mockResolvedValue(false);
 
       // When
       const result = await checkNicknameDuplication(nickname);
@@ -28,13 +32,13 @@ describe('checkNicknameDuplication 서비스 테스트', () => {
         isDuplicated: false,
         message: '사용할 수 있는 닉네임입니다.',
       });
-      expect(checkNicknameExists).toHaveBeenCalledWith('새닉네임');
+      expect(mockCheckNicknameExists).toHaveBeenCalledWith('새닉네임');
     });
 
     test('중복된 닉네임인 경우 적절한 응답을 반환한다', async () => {
       // Given
       const nickname = '중복닉네임';
-      checkNicknameExists.mockResolvedValue(true);
+      mockCheckNicknameExists.mockResolvedValue(true);
 
       // When
       const result = await checkNicknameDuplication(nickname);
@@ -44,26 +48,26 @@ describe('checkNicknameDuplication 서비스 테스트', () => {
         isDuplicated: true,
         message: '이미 사용 중인 닉네임입니다.',
       });
-      expect(checkNicknameExists).toHaveBeenCalledWith('중복닉네임');
+      expect(mockCheckNicknameExists).toHaveBeenCalledWith('중복닉네임');
     });
 
     test('공백이 포함된 닉네임을 정제하여 처리한다', async () => {
       // Given
       const nickname = '  테스트  ';
-      checkNicknameExists.mockResolvedValue(false);
+      mockCheckNicknameExists.mockResolvedValue(false);
 
       // When
       const result = await checkNicknameDuplication(nickname);
 
       // Then
       expect(result.isDuplicated).toBe(false);
-      expect(checkNicknameExists).toHaveBeenCalledWith('테스트');
+      expect(mockCheckNicknameExists).toHaveBeenCalledWith('테스트');
     });
 
     test('유효한 닉네임 형식을 올바르게 검증한다', async () => {
       // Given
       const validNicknames = ['한글닉', 'English', '123', '한글123', 'Test닉네임'];
-      checkNicknameExists.mockResolvedValue(false);
+      mockCheckNicknameExists.mockResolvedValue(false);
 
       // When & Then
       for (const nickname of validNicknames) {
@@ -120,7 +124,7 @@ describe('checkNicknameDuplication 서비스 테스트', () => {
     test('데이터베이스 오류 시 INTERNAL_ERROR를 던진다', async () => {
       // Given
       const nickname = '테스트닉네임';
-      checkNicknameExists.mockRejectedValue(new Error('닉네임 중복 확인 실패: Database error'));
+      mockCheckNicknameExists.mockRejectedValue(new Error('닉네임 중복 확인 실패: Database error'));
 
       // When & Then
       await expect(checkNicknameDuplication(nickname)).rejects.toThrow('닉네임 중복 확인 중 오류가 발생했습니다.');
@@ -131,7 +135,7 @@ describe('checkNicknameDuplication 서비스 테스트', () => {
       const nickname = '테스트닉네임';
       const customError = new Error('Custom repository error');
       customError.name = 'CustomError';
-      checkNicknameExists.mockRejectedValue(customError);
+      mockCheckNicknameExists.mockRejectedValue(customError);
 
       // When & Then
       await expect(checkNicknameDuplication(nickname)).rejects.toThrow('Custom repository error');
