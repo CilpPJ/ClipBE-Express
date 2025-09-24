@@ -27,10 +27,10 @@ export const checkUserIdDuplication = async (userId) => {
     throw new CustomError('사용자 ID는 20자 이하여야 합니다.', 400);
   }
 
-  // 아이디 형식 검증 (영문자, 숫자, 언더스코어만 허용)
-  const userIdRegex = /^[a-zA-Z0-9_]+$/;
+  // 아이디 형식 검증 (영문자, 숫자, 언더스코어만 허용, 4-20자)
+  const userIdRegex = /^[a-zA-Z0-9_]{4,20}$/;
   if (!userIdRegex.test(trimmedUserId)) {
-    throw new CustomError('사용자 ID는 영문자, 숫자, 언더스코어만 사용할 수 있습니다.', 400);
+    throw new CustomError('아이디는 4-20자의 영문, 숫자, 언더스코어만 사용할 수 있습니다.', 400);
   }
 
   try {
