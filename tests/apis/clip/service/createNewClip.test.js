@@ -33,6 +33,8 @@ describe('createNewClip 서비스 테스트', () => {
     thumbnail: 'https://example.com/thumb.jpg',
   };
 
+  const testUserToken = 'test-token-123';
+
   const mockTag = {
     id: 1,
     name: '개발',
@@ -57,21 +59,25 @@ describe('createNewClip 서비스 테스트', () => {
       createClip.mockResolvedValue(expectedCreatedClip);
 
       // 🚀 실제 함수 호출
-      const result = await createNewClip(validClipData);
+      const result = await createNewClip(validClipData, testUserToken);
 
       // 🔍 검증
-      expect(findTagByName).toHaveBeenCalledWith('개발', 'user-123');
-      expect(createClip).toHaveBeenCalledWith({
-        title: '테스트 클립',
-        url: 'https://example.com',
-        tagId: 1,
-        userId: 'user-123',
-        memo: '테스트 메모',
-        thumbnail: 'https://example.com/thumb.jpg',
-      });
+      expect(findTagByName).toHaveBeenCalledWith('개발', 'user-123', testUserToken);
+      expect(createClip).toHaveBeenCalledWith(
+        {
+          title: '테스트 클립',
+          url: 'https://example.com',
+          tagId: 1,
+          userId: 'user-123',
+          memo: '테스트 메모',
+          thumbnail: 'https://example.com/thumb.jpg',
+        },
+        testUserToken
+      );
       expect(result).toEqual({
         id: 1,
         tagId: 1,
+        message: '클립이 성공적으로 생성되었습니다.',
       });
     });
 
@@ -95,21 +101,25 @@ describe('createNewClip 서비스 테스트', () => {
       createClip.mockResolvedValue(expectedMinimalClip);
 
       // 🚀 실제 함수 호출
-      const result = await createNewClip(minimalData);
+      const result = await createNewClip(minimalData, testUserToken);
 
       // 🔍 검증
-      expect(findTagByName).toHaveBeenCalledWith('개발', 'user-123');
-      expect(createClip).toHaveBeenCalledWith({
-        title: '최소 클립',
-        url: 'https://example.com',
-        tagId: 1,
-        userId: 'user-123',
-        memo: null,
-        thumbnail: null,
-      });
+      expect(findTagByName).toHaveBeenCalledWith('개발', 'user-123', testUserToken);
+      expect(createClip).toHaveBeenCalledWith(
+        {
+          title: '최소 클립',
+          url: 'https://example.com',
+          tagId: 1,
+          userId: 'user-123',
+          memo: null,
+          thumbnail: null,
+        },
+        testUserToken
+      );
       expect(result).toEqual({
         id: 1,
         tagId: 1,
+        message: '클립이 성공적으로 생성되었습니다.',
       });
     });
 
@@ -128,18 +138,21 @@ describe('createNewClip 서비스 테스트', () => {
       createClip.mockResolvedValue(expectedCreatedClip);
 
       // 🚀 실제 함수 호출
-      await createNewClip(dataWithSpaces);
+      await createNewClip(dataWithSpaces, testUserToken);
 
       // 🔍 검증 - 공백이 제거된 데이터로 호출되었는지 확인
-      expect(findTagByName).toHaveBeenCalledWith('개발', 'user-123');
-      expect(createClip).toHaveBeenCalledWith({
-        title: '공백 클립',
-        url: 'https://example.com',
-        tagId: 1,
-        userId: 'user-123',
-        memo: '공백 메모',
-        thumbnail: 'https://example.com/thumb.jpg',
-      });
+      expect(findTagByName).toHaveBeenCalledWith('개발', 'user-123', testUserToken);
+      expect(createClip).toHaveBeenCalledWith(
+        {
+          title: '공백 클립',
+          url: 'https://example.com',
+          tagId: 1,
+          userId: 'user-123',
+          memo: '공백 메모',
+          thumbnail: 'https://example.com/thumb.jpg',
+        },
+        testUserToken
+      );
     });
 
     test('동시 생성으로 인한 태그 중복 시 기존 태그를 사용한다', async () => {
@@ -155,22 +168,26 @@ describe('createNewClip 서비스 테스트', () => {
       createClip.mockResolvedValue({ ...expectedCreatedClip, tag_id: 888 });
 
       // 🚀 실제 함수 호출
-      const result = await createNewClip(dataWithNewTag);
+      const result = await createNewClip(dataWithNewTag, testUserToken);
 
       // 🔍 검증
       expect(findTagByName).toHaveBeenCalledTimes(2);
-      expect(createTag).toHaveBeenCalledWith(newTagName, 'user-123');
-      expect(createClip).toHaveBeenCalledWith({
-        title: '테스트 클립',
-        url: 'https://example.com',
-        tagId: 888,
-        userId: 'user-123',
-        memo: '테스트 메모',
-        thumbnail: 'https://example.com/thumb.jpg',
-      });
+      expect(createTag).toHaveBeenCalledWith(newTagName, 'user-123', testUserToken);
+      expect(createClip).toHaveBeenCalledWith(
+        {
+          title: '테스트 클립',
+          url: 'https://example.com',
+          tagId: 888,
+          userId: 'user-123',
+          memo: '테스트 메모',
+          thumbnail: 'https://example.com/thumb.jpg',
+        },
+        testUserToken
+      );
       expect(result).toEqual({
         id: 1,
         tagId: 888,
+        message: '클립이 성공적으로 생성되었습니다.',
       });
     });
   });
@@ -179,7 +196,7 @@ describe('createNewClip 서비스 테스트', () => {
     test('제목이 없으면 VALIDATION_ERROR를 던진다', async () => {
       const invalidData = { ...validClipData, title: '' };
 
-      await expect(createNewClip(invalidData)).rejects.toThrow(
+      await expect(createNewClip(invalidData, testUserToken)).rejects.toThrow(
         expect.objectContaining({
           name: 'CustomError',
           message: '클립 제목은 필수입니다.',
@@ -191,7 +208,7 @@ describe('createNewClip 서비스 테스트', () => {
     test('URL이 없으면 VALIDATION_ERROR를 던진다', async () => {
       const invalidData = { ...validClipData, url: '' };
 
-      await expect(createNewClip(invalidData)).rejects.toThrow(
+      await expect(createNewClip(invalidData, testUserToken)).rejects.toThrow(
         expect.objectContaining({
           name: 'CustomError',
           message: '클립 URL은 필수입니다.',
@@ -203,7 +220,7 @@ describe('createNewClip 서비스 테스트', () => {
     test('tagName이 없으면 VALIDATION_ERROR를 던진다', async () => {
       const invalidData = { ...validClipData, tagName: '' };
 
-      await expect(createNewClip(invalidData)).rejects.toThrow(
+      await expect(createNewClip(invalidData, testUserToken)).rejects.toThrow(
         expect.objectContaining({
           name: 'CustomError',
           message: '태그는 필수입니다.',
@@ -223,29 +240,33 @@ describe('createNewClip 서비스 테스트', () => {
       createClip.mockResolvedValue({ ...expectedCreatedClip, tag_id: 999 });
 
       // 🚀 실제 함수 호출
-      const result = await createNewClip(dataWithNewTag);
+      const result = await createNewClip(dataWithNewTag, testUserToken);
 
       // 🔍 검증
-      expect(findTagByName).toHaveBeenCalledWith(newTagName, 'user-123');
-      expect(createTag).toHaveBeenCalledWith(newTagName, 'user-123');
-      expect(createClip).toHaveBeenCalledWith({
-        title: '테스트 클립',
-        url: 'https://example.com',
-        tagId: 999,
-        userId: 'user-123',
-        memo: '테스트 메모',
-        thumbnail: 'https://example.com/thumb.jpg',
-      });
+      expect(findTagByName).toHaveBeenCalledWith(newTagName, 'user-123', testUserToken);
+      expect(createTag).toHaveBeenCalledWith(newTagName, 'user-123', testUserToken);
+      expect(createClip).toHaveBeenCalledWith(
+        {
+          title: '테스트 클립',
+          url: 'https://example.com',
+          tagId: 999,
+          userId: 'user-123',
+          memo: '테스트 메모',
+          thumbnail: 'https://example.com/thumb.jpg',
+        },
+        testUserToken
+      );
       expect(result).toEqual({
         id: 1,
         tagId: 999,
+        message: '클립이 성공적으로 생성되었습니다.',
       });
     });
 
     test('userId가 없으면 VALIDATION_ERROR를 던진다', async () => {
       const invalidData = { ...validClipData, userId: '' };
 
-      await expect(createNewClip(invalidData)).rejects.toThrow(
+      await expect(createNewClip(invalidData, testUserToken)).rejects.toThrow(
         expect.objectContaining({
           name: 'CustomError',
           message: '사용자 ID는 필수입니다.',
@@ -257,7 +278,7 @@ describe('createNewClip 서비스 테스트', () => {
     test('유효하지 않은 URL 형식이면 VALIDATION_ERROR를 던진다', async () => {
       const invalidData = { ...validClipData, url: 'invalid-url' };
 
-      await expect(createNewClip(invalidData)).rejects.toThrow(
+      await expect(createNewClip(invalidData, testUserToken)).rejects.toThrow(
         expect.objectContaining({
           name: 'CustomError',
           message: '올바른 URL 형식이 아닙니다.',
@@ -272,7 +293,7 @@ describe('createNewClip 서비스 테스트', () => {
       findTagByName.mockResolvedValue(mockTag);
       createClip.mockRejectedValue(new Error('foreign key constraint violated'));
 
-      await expect(createNewClip(validClipData)).rejects.toThrow(
+      await expect(createNewClip(validClipData, testUserToken)).rejects.toThrow(
         expect.objectContaining({
           name: 'CustomError',
           message: '존재하지 않는 태그 또는 사용자입니다.',
@@ -285,7 +306,7 @@ describe('createNewClip 서비스 테스트', () => {
       findTagByName.mockResolvedValue(mockTag);
       createClip.mockRejectedValue(new Error('Database connection failed'));
 
-      await expect(createNewClip(validClipData)).rejects.toThrow(
+      await expect(createNewClip(validClipData, testUserToken)).rejects.toThrow(
         expect.objectContaining({
           name: 'CustomError',
           message: '클립 생성 중 오류가 발생했습니다.',
