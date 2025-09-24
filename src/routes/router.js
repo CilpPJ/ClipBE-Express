@@ -1,6 +1,7 @@
 import { handleTokenRefresh } from '../apis/auth/controller/handleTokenRefresh.js';
 import { handleUserCreate } from '../apis/auth/controller/handleUserCreate.js';
 import { handleUserIdDuplication } from '../apis/auth/controller/handleUserIdDuplication.js';
+import { handleNicknameDuplication } from '../apis/auth/controller/handleNicknameDuplication.js';
 import { handleUserLogin } from '../apis/auth/controller/handlerUserLogin.js';
 import { handleCreateClip } from '../apis/clip/controller/handleCreateClip.js';
 import { handleGetAllClips } from '../apis/clip/controller/handleGetAllClips.js';
@@ -18,6 +19,7 @@ export const router = (app) => {
   app.post('/api/auth/signup', handleUserCreate);
   app.post('/api/auth/refresh', handleTokenRefresh);
   app.post('/api/auth/check/duplicateId/:userId', handleUserIdDuplication);
+  app.post('/api/auth/check/duplicateNickname/:nickname', handleNicknameDuplication);
 
   // Clip API (인증 필요)
   app.get('/api/clips', handleGetAllClips);
