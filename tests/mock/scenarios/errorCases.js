@@ -172,7 +172,7 @@ export const CLIP_ERROR_SCENARIOS = {
     ],
     expectedError: {
       name: 'TypeError',
-      message: 'Cannot read properties of null (reading \'name\')',
+      message: "Cannot read properties of null (reading 'name')",
     },
   },
 };

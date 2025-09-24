@@ -32,20 +32,15 @@ export default tseslint.config(
     rules: {
       'no-console': 'warn',
       'no-undef': 'off',
-      semi: ['error', 'always'],
       eqeqeq: 'warn',
       'no-invalid-this': 'error',
       'no-return-assign': 'error',
       'no-useless-return': 'error',
       'no-unused-vars': ['warn', { argsIgnorePattern: 'req|res|next' }],
-      indent: ['error', 2, { SwitchCase: 1 }],
-      quotes: ['error', 'single'],
-      'max-len': ['error', { code: 120 }],
-      'keyword-spacing': 'error',
-      'arrow-spacing': 'error',
       'no-var': 'error',
       'prefer-const': 'error',
       'prefer-template': 'warn',
+      'prettier/prettier': 'error',
       'import/order': [
         'off',
         {

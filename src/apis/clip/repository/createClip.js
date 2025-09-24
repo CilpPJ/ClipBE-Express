@@ -28,8 +28,8 @@ export const createClip = async (clipData, userToken) => {
 
   const client = userToken
     ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
-      global: { headers: { Authorization: `Bearer ${userToken}` } },
-    })
+        global: { headers: { Authorization: `Bearer ${userToken}` } },
+      })
     : supabase;
 
   const { data, error } = await client
