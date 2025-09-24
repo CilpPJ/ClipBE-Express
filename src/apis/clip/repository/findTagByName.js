@@ -12,8 +12,8 @@ import { supabase } from '../../../db/supabase-client.js';
 export const findTagByName = async (tagName, userId, userToken) => {
   const client = userToken
     ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
-      global: { headers: { Authorization: `Bearer ${userToken}` } },
-    })
+        global: { headers: { Authorization: `Bearer ${userToken}` } },
+      })
     : supabase;
 
   const { data, error } = await client
