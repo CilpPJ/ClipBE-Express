@@ -20,12 +20,11 @@ export const handleCreateClip = async (req, res) => {
       url,
       tagName,
       userId,
-      userToken, // 사용자 토큰 추가
       memo,
       thumbnail,
     };
 
-    const newClip = await createNewClip(clipData);
+    const newClip = await createNewClip(clipData, userToken);
     const successResponse = createSuccessResponse(newClip);
 
     res.status(201).json(successResponse);

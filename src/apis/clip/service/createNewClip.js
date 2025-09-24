@@ -12,10 +12,11 @@ import { findTagByName } from '../repository/findTagByName.js';
  * @param {string} clipData.userId - 사용자 ID
  * @param {string} [clipData.memo] - 클립 메모 (선택사항)
  * @param {string} [clipData.thumbnail] - 썸네일 URL (선택사항)
+ * @param {string} userToken - 사용자 인증 토큰
  * @returns {Promise<Object>} 생성된 클립 데이터
  * @throws {CustomError} 비즈니스 로직 에러 발생 시
  */
-export const createNewClip = async (clipData) => {
+export const createNewClip = async (clipData, userToken) => {
   // 필수 필드 검증
   if (!clipData.title?.trim()) {
     throw new CustomError('클립 제목은 필수입니다.', 400);
@@ -43,20 +44,19 @@ export const createNewClip = async (clipData) => {
   // 태그 이름으로 태그 ID 조회 또는 생성
   const trimmedTagName = clipData.tagName.trim();
   const trimmedUserId = clipData.userId.trim();
-  const userToken = clipData.userToken;
 
-  let tag = await findTagByName(trimmedTagName, trimmedUserId);
+  let tag = await findTagByName(trimmedTagName, userToken);
   if (!tag) {
     // 태그가 없으면 새로 생성
     try {
-      tag = await createTag(trimmedTagName, trimmedUserId, userToken);
+      tag = await createTag(trimmedTagName, userToken);
     } catch (createError) {
       // 에러의 실제 원인을 포함한 에러 메시지 생성
       const errorDetail = `원본 에러: ${createError.message}`;
 
       // 동시 생성으로 인한 중복 오류인 경우 다시 조회
       if (createError.message.includes('이미 존재하는 태그입니다')) {
-        tag = await findTagByName(trimmedTagName, trimmedUserId);
+        tag = await findTagByName(trimmedTagName, userToken);
         if (!tag) {
           throw new CustomError(`태그 처리 중 오류가 발생했습니다. ${errorDetail}`, 500);
         }
@@ -77,7 +77,7 @@ export const createNewClip = async (clipData) => {
   };
 
   try {
-    const newClip = await createClip(cleanedClipData);
+    const newClip = await createClip(cleanedClipData, userToken);
 
     // 응답 데이터 간소화 및 camelCase 변환
     return {

@@ -1,3 +1,5 @@
+import { createClient } from '@supabase/supabase-js';
+
 import { supabase } from '../../../db/supabase-client.js';
 
 /**
@@ -7,8 +9,14 @@ import { supabase } from '../../../db/supabase-client.js';
  * @returns {Promise<Object|null>} 태그 데이터 (id, name 포함) 또는 null
  * @throws {Error} 데이터베이스 에러 발생 시
  */
-export const findTagByName = async (tagName, userId) => {
-  const { data, error } = await supabase
+export const findTagByName = async (tagName, userId, userToken) => {
+  const client = userToken
+    ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: `Bearer ${userToken}` } },
+    })
+    : supabase;
+
+  const { data, error } = await client
     .from('tags')
     .select('id, name')
     .eq('name', tagName)
