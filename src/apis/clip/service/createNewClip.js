@@ -45,18 +45,18 @@ export const createNewClip = async (clipData, userToken) => {
   const trimmedTagName = clipData.tagName.trim();
   const trimmedUserId = clipData.userId.trim();
 
-  let tag = await findTagByName(trimmedTagName, userToken);
+  let tag = await findTagByName(trimmedTagName, trimmedUserId, userToken);
   if (!tag) {
     // 태그가 없으면 새로 생성
     try {
-      tag = await createTag(trimmedTagName, userToken);
+      tag = await createTag(trimmedTagName, trimmedUserId, userToken);
     } catch (createError) {
       // 에러의 실제 원인을 포함한 에러 메시지 생성
       const errorDetail = `원본 에러: ${createError.message}`;
 
       // 동시 생성으로 인한 중복 오류인 경우 다시 조회
       if (createError.message.includes('이미 존재하는 태그입니다')) {
-        tag = await findTagByName(trimmedTagName, userToken);
+        tag = await findTagByName(trimmedTagName, trimmedUserId, userToken);
         if (!tag) {
           throw new CustomError(`태그 처리 중 오류가 발생했습니다. ${errorDetail}`, 500);
         }
