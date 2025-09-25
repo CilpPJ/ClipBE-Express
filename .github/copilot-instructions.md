@@ -185,3 +185,4 @@ SUPABASE_SERVICE_KEY=your_service_key    # Firebase admin key와 비슷
 - 변경된 파일이 많다면, 주요 변경 사항을 요약합니다.
 - 테스트 코드가 포함된 경우, 테스트 방법과 커버리지를 설명합니다.
 - 사용자가 PR 작성을 요청했을 때는 PR.md 파일을 생성하고, 그 파일을 바탕으로 PR을 생성합니다.
+- PR이 작성된 후에는 PR.md 파일을 삭제합니다.
