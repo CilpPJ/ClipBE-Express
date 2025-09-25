@@ -1,7 +1,7 @@
 import { supabase } from '../../../db/supabase-client.js';
 import { CustomError } from '../../../utils/errors.js';
 import { createProfile } from '../repository/createProfile.js';
-import { findProfileByNickname } from '../repository/findProfileByNickname.js';
+import { findProfileByNickname } from '../repository/findProfileByNickName.js';
 
 export const createUser = async ({ userId, password, nickname }) => {
   const existingNickname = await findProfileByNickname(nickname);

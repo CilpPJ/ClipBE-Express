@@ -12,7 +12,7 @@ jest.unstable_mockModule('../../../../src/db/supabase-client.js', () => ({
   },
 }));
 
-jest.unstable_mockModule('../../../../src/apis/auth/repository/findProfileByNickname.js', () => ({
+jest.unstable_mockModule('../../../../src/apis/auth/repository/findProfileByNickName.js', () => ({
   findProfileByNickname: jest.fn(),
 }));
 
@@ -22,7 +22,7 @@ jest.unstable_mockModule('../../../../src/apis/auth/repository/createProfile.js'
 
 // 모킹 설정 후 import
 const { supabase } = await import('../../../../src/db/supabase-client.js');
-const { findProfileByNickname } = await import('../../../../src/apis/auth/repository/findProfileByNickname.js');
+const { findProfileByNickname } = await import('../../../../src/apis/auth/repository/findProfileByNickName.js');
 const { createProfile } = await import('../../../../src/apis/auth/repository/createProfile.js');
 const { createUser } = await import('../../../../src/apis/auth/service/createUser.js');
 
