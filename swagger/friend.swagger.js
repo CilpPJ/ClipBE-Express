@@ -4,7 +4,7 @@
  *   get:
  *     summary: 친구 검색
  *     description: 친구를 검색합니다.
- *     tags: [Friends - 친구 API]
+ *     tags: [Friends]
  *     parameters:
  *       - in: query
  *         name: nickname
@@ -51,7 +51,7 @@
  *   post:
  *     summary: 친구 신청
  *     description: 특정 사용자에게 친구 신청(요청)을 보냅니다.
- *     tags: [Friends - 친구 API]
+ *     tags: [Friends]
  *     requestBody:
  *       required: true
  *       content:
@@ -105,7 +105,7 @@
  *   delete:
  *     summary: 친구 삭제
  *     description: 친구를 삭제합니다.
- *     tags: [Friends - 친구 API]
+ *     tags: [Friends]
  *     parameters:
  *       - in: path
  *         name: nickname
@@ -148,7 +148,7 @@
  *   get:
  *     summary: 내 친구 보기
  *     description: 내 친구 목록을 보여줍니다.
- *     tags: [Friends - 친구 API]
+ *     tags: [Friends]
  *     responses:
  *       200:
  *         description: 내 친구 목록 보기 성공
@@ -187,7 +187,7 @@
  *   put:
  *     summary: 친구 신청 수락/거절
  *     description: 친구 신청을 수락하거나 거절합니다.
- *     tags: [Friends - 친구 API]
+ *     tags: [Friends]
  *     responses:
  *       200:
  *         description: 친구 신청 수락/거절 성공
@@ -226,7 +226,7 @@
  *   get:
  *     summary: 내 친구 신청 목록 보기
  *     description: 내 친구 신청 목록을 보여줍니다.
- *     tags: [Friends - 친구 API]
+ *     tags: [Friends]
  *     responses:
  *       200:
  *         description: 내 친구 신청 목록 보기 성공

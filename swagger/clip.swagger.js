@@ -32,7 +32,7 @@
  *   post:
  *     summary: 클립 생성
  *     description: 새로운 클립을 생성합니다.
- *     tags: [Clip - 클립 API]
+ *     tags: [Clip]
  *     requestBody:
  *       required: true
  *       content:
@@ -114,7 +114,7 @@
  *   get:
  *     summary: 클립 전체 조회
  *     description: 모든 클립의 제목, 태그이름, 메모, 생성시간과 무한스크롤 관련정보를 가져옵니다.
- *     tags: [Clip - 클립 API]
+ *     tags: [Clip]
  *     parameters:
  *       - in: query
  *         name: lastCreatedAt
@@ -153,7 +153,7 @@
  *   get:
  *     summary: 특정 클립 상세 조회
  *     description: 특정 클립의 상세 내역을 가져옵니다.
- *     tags: [Clip - 클립 API]
+ *     tags: [Clip]
  *     parameters:
  *       - in: path
  *         name: clipId
@@ -189,7 +189,7 @@
  *   delete:
  *     summary: 클립 삭제
  *     description: 특정 클립을 삭제합니다.
- *     tags: [Clip - 클립 API]
+ *     tags: [Clip]
  *     parameters:
  *       - in: path
  *         name: clipId
@@ -229,7 +229,7 @@
  *   put:
  *     summary: 클립 내용 수정
  *     description: 특정 클립의 내용을 수정합니다.
- *     tags: [Clip - 클립 API]
+ *     tags: [Clip]
  *     parameters:
  *       - in: path
  *         name: clipId

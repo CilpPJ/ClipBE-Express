@@ -4,7 +4,7 @@
  *   post:
  *     summary: 회원가입
  *     description: 회원정보를 입력하여 회원가입을 진행합니다.
- *     tags: [Auth - 회원 인증 API]
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -61,7 +61,7 @@
  *   post:
  *     summary: 로그인
  *     description: 아이디와 비밀번호를 입력하여 로그인을 진행합니다.
- *     tags: [Auth - 회원 인증 API]
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -112,7 +112,7 @@
  *   post:
  *     summary: JWT 재발급
  *     description: 사용자의 토큰을 재발급합니다.
- *     tags: [Auth - 회원 인증 API]
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -154,7 +154,7 @@
  *   post:
  *     summary: 닉네임 중복확인
  *     description: 닉네임 중복확인을 진행합니다.
- *     tags: [Auth - 회원 인증 API]
+ *     tags: [Auth]
  *     parameters:
  *       - in: path
  *         name: nickname
@@ -200,7 +200,7 @@
  *   post:
  *     summary: 아이디 중복확인
  *     description: 회원가입시 아이디 중복확인을 진행합니다.
- *     tags: [Auth - 회원 인증 API]
+ *     tags: [Auth]
  *     parameters:
  *       - in: path
  *         name: userId

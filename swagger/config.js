@@ -63,7 +63,19 @@ const options = {
 const specs = swaggerJsdoc(options);
 
 export const setupSwagger = (app) => {
-  app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(specs));
+  const swaggerUiOptions = {
+    deepLinking: true,
+    displayOperationId: false,
+    defaultModelsExpandDepth: 1,
+    defaultModelExpandDepth: 1,
+    displayRequestDuration: true,
+    docExpansion: 'none',
+    filter: true,
+    showExtensions: true,
+    showCommonExtensions: true,
+  };
+
+  app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(specs, { swaggerOptions: swaggerUiOptions }));
 
   // JSON 명세 보기용
   app.get('/swagger.json', (_, res) => {
