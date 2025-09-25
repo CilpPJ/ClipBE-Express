@@ -5,7 +5,7 @@ const mockSupabaseClient = {
   from: jest.fn().mockReturnThis(),
   select: jest.fn().mockReturnThis(),
   eq: jest.fn().mockReturnThis(),
-  single: jest.fn(),
+  maybeSingle: jest.fn(),
 };
 
 const mockCreateClient = jest.fn();
@@ -49,7 +49,7 @@ describe('findClipById 리포지토리 테스트', () => {
       const userId = 'user-123';
       const userToken = null; // 기본 supabase 클라이언트 사용
 
-      mockSupabaseClient.single.mockResolvedValue({
+      mockSupabaseClient.maybeSingle.mockResolvedValue({
         data: mockClipData,
         error: null,
       });
@@ -62,7 +62,7 @@ describe('findClipById 리포지토리 테스트', () => {
       expect(mockSupabaseClient.from).toHaveBeenCalledWith('clips');
       expect(mockSupabaseClient.select).toHaveBeenCalledWith('*');
       expect(mockSupabaseClient.eq).toHaveBeenCalledWith('id', clipId);
-      expect(mockSupabaseClient.single).toHaveBeenCalled();
+      expect(mockSupabaseClient.maybeSingle).toHaveBeenCalled();
     });
 
     test('userToken이 있을 때 사용자 컨텍스트로 클라이언트를 생성한다', async () => {
@@ -75,7 +75,7 @@ describe('findClipById 리포지토리 테스트', () => {
         from: jest.fn().mockReturnThis(),
         select: jest.fn().mockReturnThis(),
         eq: jest.fn().mockReturnThis(),
-        single: jest.fn().mockResolvedValue({
+        maybeSingle: jest.fn().mockResolvedValue({
           data: mockClipData,
           error: null,
         }),
@@ -99,7 +99,7 @@ describe('findClipById 리포지토리 테스트', () => {
       const userId = 'user-123';
       const userToken = null;
 
-      mockSupabaseClient.single.mockResolvedValue({
+      mockSupabaseClient.maybeSingle.mockResolvedValue({
         data: mockClipData,
         error: null,
       });
@@ -114,19 +114,22 @@ describe('findClipById 리포지토리 테스트', () => {
   });
 
   describe('❌ 실패 케이스', () => {
-    test('클립이 존재하지 않으면 에러를 던진다', async () => {
+    test('클립이 존재하지 않으면 null을 반환한다', async () => {
       // Given
       const clipId = 999;
       const userId = 'user-123';
       const userToken = null;
 
-      mockSupabaseClient.single.mockResolvedValue({
+      mockSupabaseClient.maybeSingle.mockResolvedValue({
         data: null,
-        error: { code: 'PGRST116', message: 'No rows found' },
+        error: null, // maybeSingle은 데이터가 없어도 에러가 아님
       });
 
-      // When & Then
-      await expect(findClipById(clipId, userId, userToken)).rejects.toThrow('클립 조회 실패');
+      // When
+      const result = await findClipById(clipId, userId, userToken);
+
+      // Then
+      expect(result).toBeNull();
     });
 
     test('데이터베이스 에러 발생 시 에러를 던진다', async () => {
@@ -135,7 +138,7 @@ describe('findClipById 리포지토리 테스트', () => {
       const userId = 'user-123';
       const userToken = null;
 
-      mockSupabaseClient.single.mockResolvedValue({
+      mockSupabaseClient.maybeSingle.mockResolvedValue({
         data: null,
         error: { message: 'Database connection failed' },
       });
@@ -150,7 +153,7 @@ describe('findClipById 리포지토리 테스트', () => {
       const userId = 'user-123';
       const userToken = null;
 
-      mockSupabaseClient.single.mockRejectedValue(new Error('Network error'));
+      mockSupabaseClient.maybeSingle.mockRejectedValue(new Error('Network error'));
 
       // When & Then
       await expect(findClipById(clipId, userId, userToken)).rejects.toThrow('클립 조회 중 오류가 발생했습니다');

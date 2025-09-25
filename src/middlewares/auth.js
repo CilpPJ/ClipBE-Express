@@ -11,17 +11,10 @@ import { createErrorResponse } from '../utils/responseFormatter.js';
 export const authenticateToken = async (req, res, next) => {
   try {
     // Authorization 헤더에서 토큰 추출
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      const errorResponse = createErrorResponse('UNAUTHORIZED', '인증 토큰이 필요합니다.');
-      return res.status(401).json(errorResponse);
-    }
-
-    const token = authHeader.split(' ')[1];
+    const token = extractBearerToken(req);
 
     if (!token) {
-      const errorResponse = createErrorResponse('UNAUTHORIZED', '인증 토큰이 필요합니다.');
+      const errorResponse = createErrorResponse('UNAUTHORIZED', '토큰이 제공되지 않았습니다.');
       return res.status(401).json(errorResponse);
     }
 
@@ -48,6 +41,17 @@ export const authenticateToken = async (req, res, next) => {
 };
 
 /**
+ * 공통 Bearer 토큰 추출 헬퍼 함수
+ * @param {Object} req - Express 요청 객체
+ * @returns {string|null} 추출된 토큰 또는 null
+ */
+const extractBearerToken = (req) => {
+  const authHeader = req.headers.authorization;
+  const match = authHeader?.match(/^Bearer\s+(.+)$/i);
+  return match ? match[1].trim() : null;
+};
+
+/**
  * 선택적 인증 미들웨어
  * 토큰이 있으면 인증을 수행하고, 없어도 계속 진행합니다.
  * 토큰이 유효하지 않은 경우에만 에러를 반환합니다.
@@ -58,18 +62,11 @@ export const authenticateToken = async (req, res, next) => {
 export const optionalAuth = async (req, res, next) => {
   try {
     // Authorization 헤더에서 토큰 추출
-    const authHeader = req.headers.authorization;
+    const token = extractBearerToken(req);
 
     // 토큰이 없으면 인증 없이 계속 진행
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      req.user = null; // 사용자 정보를 null로 설정
-      return next();
-    }
-
-    const token = authHeader.split(' ')[1];
-
     if (!token) {
-      req.user = null;
+      req.user = null; // 사용자 정보를 null로 설정
       return next();
     }
 

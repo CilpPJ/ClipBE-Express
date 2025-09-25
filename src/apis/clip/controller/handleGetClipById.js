@@ -10,7 +10,8 @@ export const handleGetClipById = async (req, res) => {
   try {
     const { clipId } = req.params;
     const userId = req.user?.id; // 인증 미들웨어에서 주입된 사용자 ID
-    const userToken = req.headers.authorization?.replace('Bearer ', '');
+    const authHeader = req.headers.authorization;
+    const userToken = authHeader?.match(/^Bearer\s+(.+)$/i)?.[1];
 
     // Service 계층 호출
     const clipData = await getClipById(clipId, userId, userToken);

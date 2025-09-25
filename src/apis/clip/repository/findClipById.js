@@ -21,14 +21,14 @@ export const findClipById = async (clipId, userId, userToken) => {
   }
 
   try {
-    // 우선 간단한 쿼리로 테스트
-    const { data, error } = await client.from('clips').select('*').eq('id', clipId).single();
+    // 우선 간단한 쿼리로 테스트 - maybeSingle()로 null 허용
+    const { data, error } = await client.from('clips').select('*').eq('id', clipId).maybeSingle();
 
     if (error) {
       throw new Error(`클립 조회 실패: ${error.message}`);
     }
 
-    return data;
+    return data; // null일 수 있음 (클립이 존재하지 않는 경우)
   } catch (error) {
     throw new Error(`클립 조회 중 오류가 발생했습니다: ${error.message}`);
   }

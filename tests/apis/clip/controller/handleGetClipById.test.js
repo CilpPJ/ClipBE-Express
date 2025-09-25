@@ -97,6 +97,29 @@ describe('handleGetClipById 컨트롤러 테스트', () => {
       expect(mockGetClipById).toHaveBeenCalledWith('1', 'user-123', undefined);
       expect(mockRes.status).toHaveBeenCalledWith(200);
     });
+
+    test('authorization 스킴이 소문자여도 토큰을 파싱한다', async () => {
+      // Given
+      const reqLower = {
+        ...mockReq,
+        headers: { authorization: 'bearer   test-token-123' },
+      };
+      mockGetClipById.mockResolvedValue(mockClipData);
+      mockCreateSuccessResponse.mockReturnValue({
+        data: mockClipData,
+        status: 'SUCCESS',
+        serverDateTime: '2025-09-25T10:00:00.000Z',
+        errorCode: null,
+        errorMessage: null,
+      });
+
+      // When
+      await handleGetClipById(reqLower, mockRes);
+
+      // Then
+      expect(mockGetClipById).toHaveBeenCalledWith('1', 'user-123', 'test-token-123');
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+    });
   });
 
   describe('❌ 실패 케이스', () => {

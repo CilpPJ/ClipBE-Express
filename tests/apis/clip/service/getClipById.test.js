@@ -110,13 +110,15 @@ describe('getClipById 서비스 테스트', () => {
     test('snake_case를 camelCase로 올바르게 변환한다', async () => {
       // Given
       const mockClipData = {
-        clip_id: 1,
+        id: 1,
         title: 'camelCase 테스트',
-        content: '내용',
+        url: 'https://example.com',
+        memo: '내용',
+        thumbnail: null,
         is_public: true,
         created_at: '2023-01-01T00:00:00Z',
         updated_at: '2023-01-01T00:00:00Z',
-        tags: [{ tag_id: 1, tag_name: 'Test' }],
+        tags: { tag_id: 1, tag_name: 'Test' },
       };
 
       mockFindClipById.mockResolvedValue(mockClipData);
@@ -129,8 +131,7 @@ describe('getClipById 서비스 테스트', () => {
       expect(result).toHaveProperty('isPublic');
       expect(result).toHaveProperty('createdAt');
       expect(result).toHaveProperty('updatedAt');
-      expect(result.tags[0]).toHaveProperty('tagId');
-      expect(result.tags[0]).toHaveProperty('tagName');
+      expect(result.tags[0]).toEqual({ tagId: 1, tagName: 'Test' });
     });
   });
 

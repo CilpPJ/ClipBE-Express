@@ -42,18 +42,17 @@ export const getClipById = async (clipId, userId, userToken) => {
       isPublic: clipData.is_public,
       createdAt: clipData.created_at,
       updatedAt: clipData.updated_at,
-      tags: clipData.tags
-        ? [
-            {
-              tagId: clipData.tags.id,
-              tagName: clipData.tags.name,
-            },
-          ]
-        : [],
+      tags: (() => {
+        const tagsArray = Array.isArray(clipData.tags) ? clipData.tags : clipData.tags ? [clipData.tags] : [];
+        return tagsArray.map((tag) => ({
+          tagId: tag.tag_id ?? tag.id,
+          tagName: tag.tag_name ?? tag.name,
+        }));
+      })(),
     };
   } catch (error) {
     // Repository에서 발생한 에러를 Service 에러로 변환
-    if (error.name === 'CustomError') {
+    if (error instanceof CustomError) {
       throw error;
     }
 
