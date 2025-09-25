@@ -71,7 +71,7 @@ describe('인증 미들웨어 테스트', () => {
           status: 'ERROR',
           serverDateTime: expect.any(String),
           errorCode: 'UNAUTHORIZED',
-          errorMessage: '인증 토큰이 필요합니다.',
+          errorMessage: '토큰이 제공되지 않았습니다.',
         });
         expect(next).not.toHaveBeenCalled();
       });
@@ -89,7 +89,7 @@ describe('인증 미들웨어 테스트', () => {
           status: 'ERROR',
           serverDateTime: expect.any(String),
           errorCode: 'UNAUTHORIZED',
-          errorMessage: '인증 토큰이 필요합니다.',
+          errorMessage: '토큰이 제공되지 않았습니다.',
         });
         expect(next).not.toHaveBeenCalled();
       });
@@ -223,7 +223,7 @@ describe('인증 미들웨어 테스트', () => {
           status: 'ERROR',
           serverDateTime: expect.any(String),
           errorCode: 'UNAUTHORIZED',
-          errorMessage: '인증 토큰이 필요합니다.',
+          errorMessage: '토큰이 제공되지 않았습니다.',
         });
         expect(next).not.toHaveBeenCalled();
       });

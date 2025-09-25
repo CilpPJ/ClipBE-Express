@@ -5,7 +5,8 @@ import { handleUserIdDuplication } from '../apis/auth/controller/handleUserIdDup
 import { handleUserLogin } from '../apis/auth/controller/handlerUserLogin.js';
 import { handleCreateClip } from '../apis/clip/controller/handleCreateClip.js';
 import { handleGetAllClips } from '../apis/clip/controller/handleGetAllClips.js';
-import { conditionalAuth } from '../middlewares/auth.js';
+import { handleGetClipById } from '../apis/clip/controller/handleGetClipById.js';
+import { conditionalAuth, optionalAuth } from '../middlewares/auth.js';
 
 export const router = (app) => {
   // 인증 제외 경로 설정 (auth API만 제외)
@@ -24,4 +25,7 @@ export const router = (app) => {
   // Clip API (인증 필요)
   app.get('/api/clips', handleGetAllClips);
   app.post('/api/clips', handleCreateClip);
+
+  // Clip 상세 조회 API (선택적 인증)
+  app.get('/api/clips/:clipId', optionalAuth, handleGetClipById);
 };
