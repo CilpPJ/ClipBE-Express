@@ -7,6 +7,7 @@ import { handleCreateClip } from '../apis/clip/controller/handleCreateClip.js';
 import { handleDeleteClip } from '../apis/clip/controller/handleDeleteClip.js';
 import { handleGetAllClips } from '../apis/clip/controller/handleGetAllClips.js';
 import { handleGetClipById } from '../apis/clip/controller/handleGetClipById.js';
+import { handleUpdateClip } from '../apis/clip/controller/handleUpdateClip.js';
 import { conditionalAuth, optionalAuth } from '../middlewares/auth.js';
 
 export const router = (app) => {
@@ -26,6 +27,7 @@ export const router = (app) => {
   // Clip API (인증 필요)
   app.get('/api/clips', handleGetAllClips);
   app.post('/api/clips', handleCreateClip);
+  app.put('/api/clips/:clipId', handleUpdateClip);
   app.delete('/api/clips/:clipId', handleDeleteClip);
 
   // Clip 상세 조회 API (선택적 인증)
