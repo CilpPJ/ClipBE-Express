@@ -1,4 +1,4 @@
-node_modules# Logs
+# Logs
 logs
 *.log
 npm-debug.log*
@@ -9,6 +9,10 @@ node_modules
 dist
 *.local
 coverage
+
+# Package lock files (using pnpm)
+package-lock.json
+yarn.lock
 
 # Editor directories and files
 .vscode/*
